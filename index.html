@@ -1,0 +1,723 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Оценка эффективности инноваций</title>
+
+<style>
+:root {
+  --bg: #f7f8f6;
+  --white: #ffffff;
+  --text: #172c28;
+  --muted: #64736d;
+  --green: #246d59;
+  --light: #eaf3ed;
+  --border: #dce5df;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  line-height: 1.65;
+}
+
+main {
+  max-width: 1000px;
+  margin: auto;
+  padding: 38px 24px 70px;
+}
+
+.hero {
+  padding: 45px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.eyebrow, .kicker {
+  color: var(--green);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+h1 {
+  max-width: 800px;
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.15;
+  letter-spacing: -1.5px;
+  margin: 16px 0;
+}
+
+h2 {
+  font-size: clamp(23px, 3vw, 29px);
+  line-height: 1.3;
+  margin: 10px 0 18px;
+}
+
+h3 {
+  margin-top: 0;
+}
+
+.lead {
+  color: var(--muted);
+  font-size: 18px;
+  max-width: 700px;
+}
+
+section {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.note, .conclusion {
+  background: var(--light);
+  padding: 20px;
+  border-radius: 14px;
+  margin-top: 20px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 22px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+table {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+th {
+  background: #e9f1eb;
+  color: #254c3d;
+  text-align: left;
+}
+
+th, td {
+  padding: 15px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+td:first-child {
+  font-weight: bold;
+  width: 29%;
+}
+
+td:nth-child(2) {
+  width: 35%;
+}
+
+.criteria {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.card, .panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.card small {
+  display: block;
+  color: var(--green);
+  font-weight: bold;
+  margin-bottom: 7px;
+}
+
+.card strong {
+  display: block;
+  margin-bottom: 7px;
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.panel {
+  padding: 25px;
+  margin-top: 20px;
+  border-radius: 18px;
+}
+
+.tag {
+  display: inline-block;
+  background: var(--light);
+  color: var(--green);
+  border-radius: 20px;
+  padding: 5px 11px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.chart {
+  display: grid;
+  gap: 22px;
+  margin: 28px 0;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 45px;
+  gap: 12px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.track {
+  height: 27px;
+  background: #eef1ee;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  width: 0;
+  background: #9eb9aa;
+  border-radius: 7px;
+  transition: width 1s ease;
+}
+
+.bar.after {
+  background: var(--green);
+}
+
+.bar-row b {
+  text-align: right;
+}
+
+.growth {
+  color: var(--green);
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.choices {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.choice {
+  width: 100%;
+  padding: 15px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.choice:hover,
+.choice:focus-visible {
+  border-color: var(--green);
+}
+
+.choice.selected {
+  background: var(--light);
+  border: 2px solid var(--green);
+  padding: 14px;
+}
+
+.feedback {
+  display: none;
+  background: var(--light);
+  border-radius: 12px;
+  padding: 18px;
+  margin-top: 15px;
+}
+
+.feedback.visible {
+  display: block;
+}
+
+.feedback.warning {
+  background: #fcf0e9;
+}
+
+.feedback strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.feedback p {
+  margin-bottom: 0;
+}
+
+button.reset {
+  margin-top: 12px;
+  background: none;
+  border: none;
+  color: var(--green);
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.qa {
+  display: grid;
+  gap: 24px;
+  margin-top: 22px;
+}
+
+.qa h3 {
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.qa p {
+  margin: 0;
+}
+
+.qa ul {
+  padding-left: 22px;
+}
+
+.footer {
+  padding-top: 25px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (max-width: 650px) {
+  main {
+    padding: 20px 16px 50px;
+  }
+
+  .hero {
+    padding: 30px 0;
+  }
+
+  section {
+    padding: 30px 0;
+  }
+
+  .criteria {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .bar-row {
+    grid-template-columns: 85px 1fr 38px;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .lead {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: none;
+  }
+}
+</style>
+</head>
+
+<body>
+<main>
+
+<header class="hero">
+  <div class="eyebrow">
+    Менеджмент в образовании · Задание 2
+  </div>
+
+  <h1>Оценка эффективности инноваций в школе</h1>
+
+  <p class="lead">
+    Как понять, действительно ли новые технологии
+    и методы улучшают обучение?
+  </p>
+</header>
+
+<section>
+  <div class="kicker">01 · Основное понятие</div>
+
+  <h2>
+    Что означает разработка критериев оценки
+    эффективности инноваций?
+  </h2>
+
+  <p>
+    Это определение признаков, по которым школа проверяет,
+    насколько полезны новые методы и технологии обучения.
+  </p>
+
+  <p>
+    Например, если школа внедрила интерактивные задания,
+    руководство должно выяснить: улучшились ли знания учеников,
+    повысился ли интерес к урокам и удобно ли учителям
+    использовать новую технологию.
+  </p>
+
+  <div class="note">
+    <strong>Главная цель:</strong>
+    не просто внедрить что-то новое, а проверить,
+    приносит ли это пользу.
+  </div>
+</section>
+
+<section>
+  <div class="kicker">02 · Аналитическая таблица</div>
+  <h2>Критерии оценки эффективности</h2>
+
+  <p class="muted">
+    Что оцениваем, по каким признакам и как получаем информацию.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Критерий</th>
+          <th>Показатели оценки</th>
+          <th>Способ получения информации</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Качество обучения</td>
+          <td>Успеваемость, понимание материала</td>
+          <td>Контрольные работы, сравнение результатов</td>
+        </tr>
+
+        <tr>
+          <td>Учебная мотивация учеников</td>
+          <td>Интерес к урокам, желание учиться</td>
+          <td>Опросы учеников, наблюдение</td>
+        </tr>
+
+        <tr>
+          <td>Активность участников образовательного процесса</td>
+          <td>Участие в заданиях, проектах и обсуждениях</td>
+          <td>Наблюдение, учёт участия</td>
+        </tr>
+
+        <tr>
+          <td>Профессиональная компетентность педагогов</td>
+          <td>Умение применять новые методы</td>
+          <td>Посещение уроков, анализ работы</td>
+        </tr>
+
+        <tr>
+          <td>Эффективность использования ресурсов</td>
+          <td>Затраты времени, денег и оборудования</td>
+          <td>Анализ расходов и результатов</td>
+        </tr>
+
+        <tr>
+          <td>Удовлетворённость участников</td>
+          <td>Отзывы учеников, учителей и родителей</td>
+          <td>Анкетирование, беседы</td>
+        </tr>
+
+        <tr>
+          <td>Устойчивость полученных результатов</td>
+          <td>Сохранение улучшений со временем</td>
+          <td>Повторные проверки результатов</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">03 · Управление школой</div>
+  <h2>Как критерии связаны с менеджментом?</h2>
+
+  <p class="muted">
+    Каждый критерий помогает директору и администрации
+    принимать решения.
+  </p>
+
+  <div class="criteria">
+    <div class="card">
+      <small>01</small>
+      <strong>Качество обучения</strong>
+      <p>Проверяют, стали ли ученики лучше понимать материал.</p>
+    </div>
+
+    <div class="card">
+      <small>02</small>
+      <strong>Учебная мотивация</strong>
+      <p>Выясняют, повысился ли интерес к обучению.</p>
+    </div>
+
+    <div class="card">
+      <small>03</small>
+      <strong>Активность участников</strong>
+      <p>Следят за участием учителей и учеников в изменениях.</p>
+    </div>
+
+    <div class="card">
+      <small>04</small>
+      <strong>Компетентность педагогов</strong>
+      <p>Организуют обучение и поддержку учителей.</p>
+    </div>
+
+    <div class="card">
+      <small>05</small>
+      <strong>Использование ресурсов</strong>
+      <p>Решают, оправданы ли расходы школы.</p>
+    </div>
+
+    <div class="card">
+      <small>06</small>
+      <strong>Удовлетворённость участников</strong>
+      <p>Учитывают мнения учеников, учителей и родителей.</p>
+    </div>
+
+    <div class="card">
+      <small>07</small>
+      <strong>Устойчивость результатов</strong>
+      <p>Проверяют, сохраняются ли улучшения со временем.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">04 · Наглядный пример</div>
+  <h2>До и после внедрения инновации</h2>
+
+  <div class="panel">
+    <span class="tag">Условные данные</span>
+
+    <h3 style="margin-top: 12px">
+      Результаты контрольной работы
+    </h3>
+
+    <p class="muted">
+      Школа внедрила интерактивные задания.
+      Сравним долю учеников, успешно выполнивших работу.
+    </p>
+
+    <div class="chart"
+         role="img"
+         aria-label="До внедрения 60 процентов,
+         после внедрения 78 процентов">
+
+      <div class="bar-row">
+        <span>До внедрения</span>
+        <div class="track">
+          <div class="bar" data-width="60%"></div>
+        </div>
+        <b>60%</b>
+      </div>
+
+      <div class="bar-row">
+        <span>После внедрения</span>
+        <div class="track">
+          <div class="bar after" data-width="78%"></div>
+        </div>
+        <b>78%</b>
+      </div>
+    </div>
+
+    <div class="growth">+18 п. п.</div>
+
+    <p class="muted">
+      Рост доли учеников, успешно выполнивших работу.
+    </p>
+
+    <p>
+      <strong>Управленческий вывод:</strong>
+      результаты стали лучше. Директору важно проверить,
+      связано ли улучшение с новой технологией и сохраняется ли
+      оно со временем.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">05 · Интерактивное задание</div>
+  <h2>Ты — директор школы</h2>
+
+  <div class="panel">
+    <h3>Управленческая ситуация</h3>
+
+    <p>
+      После внедрения новой технологии ученики стали активнее
+      на уроках, но оценки пока не улучшились.
+    </p>
+
+    <strong>Как поступить директору?</strong>
+
+    <div class="choices">
+      <button class="choice" data-answer="a" aria-pressed="false">
+        А. Отменить новую технологию
+      </button>
+
+      <button class="choice" data-answer="b" aria-pressed="false">
+        Б. Выяснить причины и помочь учителям
+      </button>
+
+      <button class="choice" data-answer="c" aria-pressed="false">
+        В. Ничего не менять
+      </button>
+    </div>
+
+    <div id="feedback" class="feedback" role="status" aria-live="polite">
+      <strong id="feedback-title"></strong>
+      <p id="feedback-text"></p>
+      <button class="reset" id="reset">Попробовать снова ↺</button>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom: 0">
+  <div class="kicker">06 · Обсуждение</div>
+  <h2>Вопросы для обсуждения</h2>
+
+  <div class="qa">
+    <div>
+      <h3>
+        Почему внедрение инновационной технологии не всегда
+        повышает качество образования?
+      </h3>
+
+      <p>
+        Потому что новая технология сама по себе не гарантирует
+        хороший результат. Например, школа может купить
+        интерактивные доски, но если учителя не умеют ими
+        пользоваться, качество уроков не улучшится.
+      </p>
+    </div>
+
+    <div>
+      <h3>
+        Какие условия необходимы для достижения
+        устойчивого результата?
+      </h3>
+
+      <ul>
+        <li>Подготовка учителей к новым методам.</li>
+        <li>Наличие необходимых ресурсов.</li>
+        <li>Учёт потребностей учеников.</li>
+        <li>Регулярная проверка результатов.</li>
+        <li>Исправление ошибок и поддержка успешных изменений.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="conclusion">
+    <h3>Вывод</h3>
+
+    <p>
+      Эффективность инноваций зависит не только от технологии,
+      но и от правильного управления. Руководство школы должно
+      планировать изменения, поддерживать учителей, оценивать
+      результаты и улучшать обучение.
+    </p>
+  </div>
+</section>
+
+<footer class="footer">
+  Учебная работа · Менеджмент в образовании
+</footer>
+
+</main>
+
+<script>
+// Интерактивные ответы директора
+const buttons = document.querySelectorAll(".choice");
+const feedback = document.getElementById("feedback");
+const feedbackTitle = document.getElementById("feedback-title");
+const feedbackText = document.getElementById("feedback-text");
+const resetButton = document.getElementById("reset");
+
+buttons.forEach(button => {
+  button.addEventListener("click", () => {
+    const correct = button.dataset.answer === "b";
+
+    buttons.forEach(item => {
+      const selected = item === button;
+      item.classList.toggle("selected", selected);
+      item.setAttribute("aria-pressed", String(selected));
+    });
+
+    feedback.classList.add("visible");
+    feedback.classList.toggle("warning", !correct);
+
+    feedbackTitle.textContent = correct
+      ? "Верное решение!"
+      : "Стоит подумать ещё";
+
+    feedbackText.textContent = correct
+      ? "Директор выясняет причины, помогает учителям и повторно проверяет результаты. Это пример грамотного управления инновациями."
+      : "Прежде чем отменять технологию или оставлять всё без изменений, важно выяснить, почему оценки не растут.";
+  });
+});
+
+// Повторное прохождение задания
+resetButton.addEventListener("click", () => {
+  feedback.classList.remove("visible", "warning");
+
+  buttons.forEach(button => {
+    button.classList.remove("selected");
+    button.setAttribute("aria-pressed", "false");
+  });
+});
+
+// Анимация графика при прокрутке
+const bars = document.querySelectorAll(".bar");
+
+if ("IntersectionObserver" in window) {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.width = entry.target.dataset.width;
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  bars.forEach(bar => observer.observe(bar));
+} else {
+  bars.forEach(bar => {
+    bar.style.width = bar.dataset.width;
+  });
+}
+</script>
+
+</body>
+</html>
